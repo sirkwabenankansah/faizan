@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "81584680210",
+    "project_id": "facebooklogin-8c7c8",
+    "storage_bucket": "facebooklogin-8c7c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81584680210:android:cf7a99813cfeadac0e97cb",
+        "android_client_info": {
+          "package_name": "com.company.namal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81584680210-ppsa0725blib9nij0euf3bq0gd5gqs4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBduwbVnpObmrprmFrcP6FBW5yAz9xc1ek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81584680210-ppsa0725blib9nij0euf3bq0gd5gqs4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

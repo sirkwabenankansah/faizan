@@ -1,0 +1,57 @@
+name: Flutter Build Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install and set up Java
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install java 17.0.10-zulu
+          sdk default java 17.0.10-zulu
+
+      - name: Install Flutter
+        run: |
+          wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.7.12-stable.tar.xz
+          tar xf flutter_linux_3.7.12-stable.tar.xz -C $HOME
+          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+
+      - name: Check Flutter Version and Doctor Output
+        run: |
+          flutter --version
+          flutter doctor
+          flutter pub get
+
+      - name: Build APK
+        run: flutter build apk
+
+      - name: Archive APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/*.apk
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Update APK on VM
+        run: |
+          # Copy the APK to a temporary location on the VM
+          scp -o StrictHostKeyChecking=no ./build/app/outputs/flutter-apk/app-release.apk azureuser@172.191.161.66:/tmp/app-release.apk
+          # SSH into the VM, delete any existing APK in /var/www, and move the new APK to /var/www
+          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "sudo rm -f /var/www/app-release.apk && sudo mv /tmp/app-release.apk /var/www/"
+
+
